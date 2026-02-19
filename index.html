@@ -1,0 +1,486 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>levax@portfolio:~$</title>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;700&family=Fira+Code:wght@300;400;600&display=swap" rel="stylesheet"/>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:        #0d0d0d;
+      --bg2:       #111111;
+      --surface:   #1a1a1a;
+      --border:    #2a2a2a;
+      --green:     #39ff14;
+      --green-dim: #1a7a05;
+      --cyan:      #00e5ff;
+      --yellow:    #ffd600;
+      --red:       #ff3d3d;
+      --purple:    #c678dd;
+      --muted:     #555;
+      --text:      #ccc;
+      --white:     #eee;
+    }
+
+    html, body {
+      height: 100%;
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 14px;
+      line-height: 1.6;
+      overflow: hidden;
+    }
+
+    /* Scanline overlay */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background: repeating-linear-gradient(
+        0deg,
+        transparent,
+        transparent 2px,
+        rgba(0,0,0,0.04) 2px,
+        rgba(0,0,0,0.04) 4px
+      );
+      pointer-events: none;
+      z-index: 9999;
+    }
+
+    /* CRT vignette */
+    body::after {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background: radial-gradient(ellipse at center, transparent 60%, rgba(0,0,0,0.7) 100%);
+      pointer-events: none;
+      z-index: 9998;
+    }
+
+    #app {
+      display: flex;
+      flex-direction: column;
+      height: 100vh;
+      max-width: 900px;
+      margin: 0 auto;
+    }
+
+    /* Title bar */
+    .titlebar {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--surface);
+      border-bottom: 1px solid var(--border);
+      padding: 10px 16px;
+      flex-shrink: 0;
+    }
+    .dot { width: 12px; height: 12px; border-radius: 50%; }
+    .dot.red    { background: var(--red); }
+    .dot.yellow { background: var(--yellow); }
+    .dot.green  { background: var(--green); }
+    .titlebar-text {
+      margin-left: auto;
+      margin-right: auto;
+      color: var(--muted);
+      font-size: 12px;
+      letter-spacing: 0.05em;
+    }
+
+    /* Terminal output */
+    #output {
+      flex: 1;
+      overflow-y: auto;
+      padding: 20px 24px;
+      scroll-behavior: smooth;
+    }
+    #output::-webkit-scrollbar { width: 4px; }
+    #output::-webkit-scrollbar-track { background: transparent; }
+    #output::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
+
+    /* Input row */
+    .input-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 14px 24px;
+      border-top: 1px solid var(--border);
+      background: var(--bg2);
+      flex-shrink: 0;
+    }
+    .prompt-label { color: var(--green); white-space: nowrap; }
+    .prompt-label span { color: var(--cyan); }
+    #cmd-input {
+      flex: 1;
+      background: transparent;
+      border: none;
+      outline: none;
+      color: var(--white);
+      font-family: inherit;
+      font-size: 14px;
+      caret-color: var(--green);
+    }
+
+    /* Lines */
+    .line { margin: 2px 0; white-space: pre-wrap; word-break: break-word; animation: fadein 0.1s ease; }
+    @keyframes fadein { from { opacity: 0; } to { opacity: 1; } }
+
+    .line.cmd   { color: var(--white); }
+    .line.info  { color: var(--text); }
+    .line.ok    { color: var(--green); }
+    .line.warn  { color: var(--yellow); }
+    .line.err   { color: var(--red); }
+    .line.muted { color: var(--muted); }
+    .line.head  { color: var(--cyan); font-weight: 600; }
+    .line.art   { color: var(--green); line-height: 1.2; }
+
+    .prompt-echo { color: var(--green); }
+    .prompt-echo span { color: var(--cyan); }
+
+    a { color: var(--cyan); text-decoration: none; }
+    a:hover { text-decoration: underline; color: var(--green); }
+
+    .tag {
+      display: inline-block;
+      border: 1px solid var(--green-dim);
+      color: var(--green);
+      padding: 1px 8px;
+      border-radius: 2px;
+      margin: 2px 4px 2px 0;
+      font-size: 12px;
+    }
+    .tag.blue   { border-color: #005f7f; color: var(--cyan); }
+    .tag.yellow { border-color: #7f6400; color: var(--yellow); }
+
+    .section-box {
+      border: 1px solid var(--border);
+      border-left: 3px solid var(--green);
+      padding: 12px 16px;
+      margin: 8px 0;
+      background: var(--surface);
+    }
+    .section-box .label { color: var(--muted); font-size: 12px; margin-bottom: 4px; }
+    .section-box .value { color: var(--white); }
+
+    .blink { animation: blink 1s step-end infinite; }
+    @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0} }
+
+    /* mobile */
+    @media(max-width:600px){
+      html,body{ font-size:12px; }
+      #output{ padding:12px 14px; }
+      .input-row{ padding:10px 14px; }
+    }
+  </style>
+</head>
+<body>
+<div id="app">
+  <div class="titlebar">
+    <div class="dot red"></div>
+    <div class="dot yellow"></div>
+    <div class="dot green"></div>
+    <div class="titlebar-text">levax@portfolio: ~</div>
+  </div>
+
+  <div id="output"></div>
+
+  <div class="input-row">
+    <span class="prompt-label">levax<span>@portfolio</span>:~$</span>
+    <input id="cmd-input" type="text" autocomplete="off" autocorrect="off" spellcheck="false" autofocus/>
+  </div>
+</div>
+
+<script>
+const output = document.getElementById('output');
+const input  = document.getElementById('cmd-input');
+
+// ── DATA ──────────────────────────────────────────────────────────────────────
+const DATA = {
+  name: 'Levax',
+  handle: '@notlevax',
+  bio: [
+    'Positive. Extrovert. Linux enjoyer (and abuser).',
+    'I make things on the web, break things on Linux,',
+    'and occasionally write Python that actually works.',
+  ],
+  skills: {
+    'Web': ['HTML', 'CSS', 'JavaScript'],
+    'Languages': ['Python'],
+    'Linux': ['Bash', 'Linux sysadmin', 'Package managers', 'Breaking things'],
+  },
+  projects: [
+    { name: '???', desc: 'Coming soon... (the mystery is the feature)', status: 'WIP' },
+    { name: '???', desc: 'Unknown rn :>', status: 'WIP' },
+    { name: '???', desc: 'Top secret, don\'t ask', status: 'WIP' },
+  ],
+  contact: [
+    { label: 'Telegram',  value: '@notlevax', href: 'https://t.me/notlevax' },
+    { label: 'Discord',   value: '@notlevax', href: null },
+    { label: 'Instagram', value: '@notlevax', href: 'https://instagram.com/notlevax' },
+  ],
+};
+
+// ── HELPERS ───────────────────────────────────────────────────────────────────
+function line(text = '', cls = 'info') {
+  const d = document.createElement('div');
+  d.className = 'line ' + cls;
+  d.innerHTML = text;
+  output.appendChild(d);
+  output.scrollTop = output.scrollHeight;
+  return d;
+}
+
+function blank() { line(''); }
+
+function echoCmd(cmd) {
+  line(`<span class="prompt-echo">levax<span>@portfolio</span>:~$</span> ${cmd}`, 'cmd');
+}
+
+// Typewriter a single line
+function typewrite(text, cls = 'info', delay = 0) {
+  return new Promise(resolve => {
+    setTimeout(() => {
+      const d = document.createElement('div');
+      d.className = 'line ' + cls;
+      output.appendChild(d);
+      let i = 0;
+      const tick = setInterval(() => {
+        d.textContent += text[i];
+        i++;
+        output.scrollTop = output.scrollHeight;
+        if (i >= text.length) { clearInterval(tick); resolve(); }
+      }, 18);
+    }, delay);
+  });
+}
+
+// Print lines with delay
+async function printLines(lines, baseDelay = 60) {
+  for (let i = 0; i < lines.length; i++) {
+    await new Promise(r => setTimeout(r, baseDelay));
+    const [text, cls] = Array.isArray(lines[i]) ? lines[i] : [lines[i], 'info'];
+    line(text, cls);
+    output.scrollTop = output.scrollHeight;
+  }
+}
+
+// ── COMMANDS ──────────────────────────────────────────────────────────────────
+const COMMANDS = {
+
+  help() {
+    blank();
+    line('┌─────────────────────────────────────────┐', 'muted');
+    line('│            AVAILABLE COMMANDS           │', 'head');
+    line('└─────────────────────────────────────────┘', 'muted');
+    blank();
+    const cmds = [
+      ['about',    'Who is this guy?'],
+      ['skills',   'Tech stack & tools'],
+      ['projects', 'Things I\'ve built (or will build)'],
+      ['contact',  'Find me on the internet'],
+      ['whoami',   'Quick ID card'],
+      ['clear',    'Clear the terminal'],
+      ['help',     'Show this menu'],
+      ['sudo rm -rf /', 'Don\'t.'],
+    ];
+    cmds.forEach(([cmd, desc]) => {
+      line(`  <span style="color:var(--green)">${cmd.padEnd(18)}</span><span style="color:var(--text)">${desc}</span>`);
+    });
+    blank();
+  },
+
+  about() {
+    blank();
+    line('// about.txt', 'muted');
+    blank();
+    line(`  Name   : <span style="color:var(--cyan)">${DATA.name}</span> <span style="color:var(--muted)">${DATA.handle}</span>`);
+    blank();
+    DATA.bio.forEach(l => line(`  ${l}`));
+    blank();
+    line('  Status : <span class="tag">Open to collabs</span><span class="tag yellow">Linux enjoyer</span><span class="tag blue">Web dev</span>');
+    blank();
+  },
+
+  skills() {
+    blank();
+    line('// skills.json', 'muted');
+    blank();
+    Object.entries(DATA.skills).forEach(([cat, tags]) => {
+      line(`  <span style="color:var(--yellow)">${cat}</span>`);
+      line('  ' + tags.map(t => `<span class="tag">${t}</span>`).join(''));
+      blank();
+    });
+  },
+
+  projects() {
+    blank();
+    line('// projects/', 'muted');
+    blank();
+    DATA.projects.forEach((p, i) => {
+      line(`  <span style="color:var(--cyan)">[${i+1}]</span> <span style="color:var(--white)">${p.name}</span> <span class="tag yellow">${p.status}</span>`);
+      line(`      <span style="color:var(--muted)">${p.desc}</span>`);
+      blank();
+    });
+    line('  <span style="color:var(--muted);font-style:italic">  Projects loading... (the developer is touching grass)</span>');
+    blank();
+  },
+
+  contact() {
+    blank();
+    line('// contact.sh', 'muted');
+    blank();
+    DATA.contact.forEach(c => {
+      const val = c.href
+        ? `<a href="${c.href}" target="_blank">${c.value}</a>`
+        : `<span style="color:var(--white)">${c.value}</span>`;
+      line(`  <span style="color:var(--green)">${c.label.padEnd(12)}</span>${val}`);
+    });
+    blank();
+    line('  <span style="color:var(--muted)">// slide into my DMs, i don\'t bite (usually)</span>');
+    blank();
+  },
+
+  whoami() {
+    blank();
+    line(`  <span style="color:var(--cyan)">${DATA.name}</span> — Positive extrovert who does Linux crimes for fun.`);
+    line(`  Handle : <span style="color:var(--green)">${DATA.handle}</span>`);
+    line(`  Role   : Web Dev / Python / Linux Abuser`);
+    blank();
+  },
+
+  clear() {
+    output.innerHTML = '';
+  },
+
+  'sudo rm -rf /'() {
+    blank();
+    line('[sudo] password for levax:', 'warn');
+    setTimeout(() => {
+      line('rm: it is dangerous to operate recursively on \'/\'', 'err');
+      line('rm: use --no-preserve-root to override this failsafe', 'err');
+      setTimeout(() => {
+        line('...just kidding. Nice try tho. 💀', 'ok');
+        blank();
+      }, 800);
+    }, 600);
+  },
+
+  ls() {
+    blank();
+    line('about.txt &nbsp; skills.json &nbsp; projects/ &nbsp; contact.sh');
+    blank();
+  },
+
+  pwd() {
+    line('/home/levax/portfolio');
+  },
+
+  uname() {
+    line('Linux portfolio 6.6.0-levax #1 SMP PREEMPT_DYNAMIC x86_64 GNU/Linux');
+  },
+
+  neofetch() {
+    blank();
+    line('        #####          <span style="color:var(--cyan)">levax@portfolio</span>', 'art');
+    line('       #######         ─────────────────', 'art');
+    line('       ##O#O##         <span style="color:var(--green)">OS:</span>      Arch btw (jk, whatever works)', 'art');
+    line('       #######         <span style="color:var(--green)">Shell:</span>   bash/zsh (chaotic neutral)', 'art');
+    line('     ###########       <span style="color:var(--green)">Editor:</span>  VS Code (don\'t @ me)', 'art');
+    line('    #############      <span style="color:var(--green)">Skills:</span>  Web, Python, Linux crimes', 'art');
+    line('   ###############     <span style="color:var(--green)">Status:</span>  <span style="color:var(--yellow)">Actively breaking things</span>', 'art');
+    line('  #################    <span style="color:var(--green)">Mood:</span>    Positive & Caffeinated', 'art');
+    line(' ###################   ', 'art');
+    line(' ####################  <span style="background:var(--red)">   </span><span style="background:var(--yellow)">   </span><span style="background:var(--green)">   </span><span style="background:var(--cyan)">   </span><span style="background:var(--purple)">   </span>', 'art');
+    blank();
+  },
+};
+
+// ── BOOT SEQUENCE ─────────────────────────────────────────────────────────────
+async function boot() {
+  input.disabled = true;
+
+  await typewrite('Initializing levax.portfolio v1.0.0...', 'muted');
+  await new Promise(r => setTimeout(r, 300));
+  await typewrite('Loading modules... [ OK ]', 'ok');
+  await new Promise(r => setTimeout(r, 200));
+
+  blank();
+
+  // ASCII banner
+  const banner = [
+    ' ██╗     ███████╗██╗   ██╗ █████╗ ██╗  ██╗',
+    ' ██║     ██╔════╝██║   ██║██╔══██╗╚██╗██╔╝',
+    ' ██║     █████╗  ██║   ██║███████║ ╚███╔╝ ',
+    ' ██║     ██╔══╝  ╚██╗ ██╔╝██╔══██║ ██╔██╗ ',
+    ' ███████╗███████╗ ╚████╔╝ ██║  ██║██╔╝ ██╗',
+    ' ╚══════╝╚══════╝  ╚═══╝  ╚═╝  ╚═╝╚═╝  ╚═╝',
+  ];
+  banner.forEach(l => line(l, 'art'));
+
+  blank();
+  line('  <span style="color:var(--cyan)">Levax</span> <span style="color:var(--muted)">@notlevax</span>  —  Web Dev / Python / Linux Enjoyer', 'info');
+  blank();
+  line('  Type <span style="color:var(--green)">help</span> to see available commands.', 'info');
+  line('  Type <span style="color:var(--green)">neofetch</span> for system info.', 'info');
+  blank();
+  line('─'.repeat(55), 'muted');
+  blank();
+
+  input.disabled = false;
+  input.focus();
+}
+
+// ── INPUT HANDLING ────────────────────────────────────────────────────────────
+const history = [];
+let histIdx = -1;
+
+input.addEventListener('keydown', e => {
+  if (e.key === 'ArrowUp') {
+    histIdx = Math.min(histIdx + 1, history.length - 1);
+    input.value = history[histIdx] || '';
+    e.preventDefault();
+  } else if (e.key === 'ArrowDown') {
+    histIdx = Math.max(histIdx - 1, -1);
+    input.value = histIdx === -1 ? '' : history[histIdx];
+    e.preventDefault();
+  }
+});
+
+input.addEventListener('keyup', e => {
+  if (e.key !== 'Enter') return;
+  const raw = input.value.trim();
+  if (!raw) return;
+
+  history.unshift(raw);
+  histIdx = -1;
+
+  echoCmd(raw);
+  input.value = '';
+
+  const key = raw.toLowerCase();
+  if (COMMANDS[key]) {
+    COMMANDS[key]();
+  } else if (key === 'exit' || key === 'quit') {
+    blank();
+    line('There\'s no escape from this portfolio. 😈', 'warn');
+    blank();
+  } else {
+    blank();
+    line(`bash: <span style="color:var(--red)">${raw}</span>: command not found`, 'err');
+    line('Type <span style="color:var(--green)">help</span> for available commands.', 'muted');
+    blank();
+  }
+
+  output.scrollTop = output.scrollHeight;
+});
+
+// Click anywhere to focus input
+document.addEventListener('click', () => input.focus());
+
+boot();
+</script>
+</body>
+</html>
