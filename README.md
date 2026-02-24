@@ -23,7 +23,7 @@
 
 ## 🚀 Live Demo
 
-👉 **[notlevax.github.io/portfolio](https://notlevax.github.io/portfolio)**
+👉 **[levaxgit.github.io/CLI-Portfolio/](https://levaxgit.github.io/CLI-Portfolio/)**
 <!-- update this link once you deploy -->
 
 ---
