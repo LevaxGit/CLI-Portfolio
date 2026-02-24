@@ -22,6 +22,29 @@
       --muted:     #555;
       --text:      #ccc;
       --white:     #eee;
+      --transition: 0.25s ease;
+    }
+
+    /* ── LIGHT MODE ── */
+    :root.light {
+      --bg:        #f5f5f0;
+      --bg2:       #ebebeb;
+      --surface:   #e0e0d8;
+      --border:    #c8c8c0;
+      --green:     #1a7a05;
+      --green-dim: #3aaa10;
+      --cyan:      #0077aa;
+      --yellow:    #b38000;
+      --red:       #cc2222;
+      --purple:    #7c3d99;
+      --muted:     #888;
+      --text:      #333;
+      --white:     #111;
+    }
+
+    /* smooth transitions on theme switch */
+    html, body, #app, .titlebar, .input-row, #output, #cmd-input {
+      transition: background var(--transition), color var(--transition), border-color var(--transition);
     }
 
     html, body {
@@ -58,6 +81,10 @@
       background: radial-gradient(ellipse at center, transparent 60%, rgba(0,0,0,0.7) 100%);
       pointer-events: none;
       z-index: 9998;
+      transition: opacity 0.25s ease;
+    }
+    :root.light body::after {
+      opacity: 0;
     }
 
     #app {
@@ -175,7 +202,7 @@
       .input-row{ padding:10px 14px; }
     }
 
-       /* ── THEME TOGGLE BUTTON ── */
+    /* ── THEME TOGGLE BUTTON ── */
     #theme-toggle {
       background: none;
       border: 1px solid var(--border);
@@ -198,7 +225,6 @@
       background: rgba(57,255,20,0.05);
     }
     .toggle-icon { font-size: 13px; line-height: 1; }
-    
   </style>
 </head>
 <body>
@@ -208,6 +234,10 @@
     <div class="dot yellow"></div>
     <div class="dot green"></div>
     <div class="titlebar-text">levax@portfolio: ~</div>
+    <button id="theme-toggle" title="Toggle light/dark mode">
+      <span class="toggle-icon">🌙</span>
+      <span class="toggle-label">dark</span>
+    </button>
   </div>
 
   <div id="output"></div>
@@ -330,6 +360,7 @@ const COMMANDS = {
       ['projects', 'Things I\'ve built (or will build)'],
       ['contact',  'Find me on the internet'],
       ['whoami',   'Quick ID card'],
+      ['theme',    'Toggle light / dark mode'],
       ['clear',    'Clear the terminal'],
       ['help',     'Show this menu'],
       ['sudo rm -rf /', 'Don\'t.'],
@@ -430,6 +461,14 @@ const COMMANDS = {
     line('Linux portfolio 6.6.0-levax #1 SMP PREEMPT_DYNAMIC x86_64 GNU/Linux');
   },
 
+  theme() {
+    const switching = !isLight;
+    applyTheme(switching);
+    blank();
+    line(`  Switched to <span style="color:var(--green)">${switching ? 'light' : 'dark'}</span> mode. ${switching ? '☀️ my eyes!!' : '🌙 that\'s better.'}`, 'ok');
+    blank();
+  },
+
   neofetch() {
     blank();
     line('        #####          <span style="color:var(--cyan)">levax@portfolio</span>', 'art');
@@ -450,7 +489,7 @@ const COMMANDS = {
 async function boot() {
   input.disabled = true;
 
-  await typewrite('Initializing levax.portfolio v1.1.0...', 'muted');
+  await typewrite('Initializing levax.portfolio v1.0.0...', 'muted');
   await new Promise(r => setTimeout(r, 300));
   await typewrite('Loading modules... [ OK ]', 'ok');
   await new Promise(r => setTimeout(r, 200));
