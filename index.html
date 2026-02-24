@@ -298,6 +298,7 @@ const DATA = {
     { label: 'Telegram',  value: '@notlevax', href: 'https://t.me/notlevax' },
     { label: 'Discord',   value: '@notlevax', href: null },
     { label: 'Instagram', value: '@notlevax', href: 'https://instagram.com/notlevax' },
+    { label: 'GitHub',    value: 'LevaxGit', href: 'https://github.com/LevaxGit' },
   ],
 };
 
@@ -359,6 +360,7 @@ const COMMANDS = {
       ['skills',   'Tech stack & tools'],
       ['projects', 'Things I\'ve built (or will build)'],
       ['contact',  'Find me on the internet'],
+      ['github',   'Open my GitHub (yes it auto-opens)'],
       ['whoami',   'Quick ID card'],
       ['theme',    'Toggle light / dark mode'],
       ['clear',    'Clear the terminal'],
@@ -459,6 +461,18 @@ const COMMANDS = {
 
   uname() {
     line('Linux portfolio 6.6.0-levax #1 SMP PREEMPT_DYNAMIC x86_64 GNU/Linux');
+  },
+
+  github() {
+    blank();
+    line('// github.sh', 'muted');
+    blank();
+    line(`  <span style="color:var(--green)">GitHub</span>  <a href="https://github.com/LevaxGit" target="_blank">github.com/LevaxGit</a>`);
+    line(`  <span style="color:var(--green)">Repo  </span>  <a href="https://github.com/LevaxGit/CLI-Portfolio" target="_blank">github.com/LevaxGit/CLI-Portfolio</a>`);
+    blank();
+    line('  <span style="color:var(--muted)">// starring the repo is not mandatory... but it would be cool ngl</span>');
+    blank();
+    setTimeout(() => window.open('https://github.com/LevaxGit', '_blank'), 500);
   },
 
   theme() {
