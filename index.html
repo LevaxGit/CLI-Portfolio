@@ -290,9 +290,9 @@ const DATA = {
     'Linux': ['Bash', 'Linux sysadmin', 'Package managers', 'Breaking things'],
   },
   projects: [
-    { name: '???', desc: 'Coming soon... (the mystery is the feature)', status: 'WIP' },
+    { name: 'This Portfolio :>', desc: 'i cooked this one soo hard 😮‍💨😮‍💨', status: 'WIP' },
     { name: '???', desc: 'Unknown rn :>', status: 'WIP' },
-    { name: '???', desc: 'Top secret, don\'t ask', status: 'WIP' },
+    { name: '???', desc: 'Maybe Hyprland dotfiles or Fastfetch conf, idk :/', status: 'WIP' },
   ],
   contact: [
     { label: 'Telegram',  value: '@notlevax', href: 'https://t.me/notlevax' },
@@ -362,7 +362,11 @@ const COMMANDS = {
       ['contact',  'Find me on the internet'],
       ['github',   'Open my GitHub (yes it auto-opens)'],
       ['whoami',   'Quick ID card'],
+      ['now',      'What I\'m currently up to'],
+      ['stats',    'My life in numbers & skill bars'],
+      ['fortune',  'Random dev wisdom (or garbage)'],
       ['theme',    'Toggle light / dark mode'],
+      ['neofetch', 'System info, hacker style'],
       ['clear',    'Clear the terminal'],
       ['help',     'Show this menu'],
       ['sudo rm -rf /', 'Don\'t.'],
@@ -496,6 +500,112 @@ const COMMANDS = {
     line(' ###################   ', 'art');
     line(' ####################  <span style="background:var(--red)">   </span><span style="background:var(--yellow)">   </span><span style="background:var(--green)">   </span><span style="background:var(--cyan)">   </span><span style="background:var(--purple)">   </span>', 'art');
     blank();
+  },
+
+  fortune() {
+    const quotes = [
+      ['\'It works on my machine.\' — every dev ever', 'ok'],
+      ['\'I\'ll fix it later.\' — famous last words', 'warn'],
+      ['The best code is no code. But here we are.', 'info'],
+      ['rm -rf node_modules is self care.', 'ok'],
+      ['It\'s not a bug, it\'s an undocumented feature.', 'cyan'],
+      ['99 little bugs in the code... take one down, patch it around... 127 little bugs in the code.', 'warn'],
+      ['Linux: because real devs don\'t need a GUI to suffer.', 'ok'],
+      ['Have you tried turning it off and on again? Seriously though.', 'info'],
+      ['Git blame: the fastest way to make enemies at work.', 'warn'],
+      ['sudo make me a sandwich.', 'ok'],
+      ['There are 10 types of people: those who understand binary and those who don\'t.', 'info'],
+      ['A CPU without fans is just a really hot rock.', 'muted'],
+      ['CSS: 2 hours to center a div. 0 regrets.', 'warn'],
+      ['chmod 777 is not a solution. (but it works tho)', 'err'],
+      ['My code doesn\'t have bugs. It has random features.', 'ok'],
+    ];
+    const [text, cls] = quotes[Math.floor(Math.random() * quotes.length)];
+    blank();
+    line('  🎲 fortune cookie says:', 'muted');
+    blank();
+    line(`  "<span style="color:var(--cyan)">${text}</span>"`);
+    blank();
+    line('  <span style="color:var(--muted)">// run again for another one</span>');
+    blank();
+  },
+
+  stats() {
+    blank();
+    line('// levax_stats.json', 'muted');
+    blank();
+    line('  <span style="color:var(--yellow)">[ REAL STATS ]</span>');
+    line(`  <span style="color:var(--green)">Linux installs broken       </span> <span style="color:var(--cyan)">16</span>`);
+    line(`  <span style="color:var(--green)">Times said "it works on my machine"</span> <span style="color:var(--cyan)">∞</span>`);
+    line(`  <span style="color:var(--green)">Cups of coffee today        </span> <span style="color:var(--cyan)">3 (and counting)</span>`);
+    line(`  <span style="color:var(--green)">Tabs open right now         </span> <span style="color:var(--cyan)">too many</span>`);
+    line(`  <span style="color:var(--green)">Hours lost to config files  </span> <span style="color:var(--cyan)">374</span>`);
+    line(`  <span style="color:var(--green)">sudo password attempts      </span> <span style="color:var(--cyan)">1 (i'm not dumb)</span>`);
+    line(`  <span style="color:var(--green)">npm packages installed      </span> <span style="color:var(--cyan)">0 (this site has zero deps 😎)</span>`);
+    line(`  <span style="color:var(--green)">Times read the docs         </span> <span style="color:var(--cyan)">lol</span>`);
+    blank();
+    line('  <span style="color:var(--yellow)">[ SKILL LEVELS ]</span>');
+    const bars = [
+      ['HTML/CSS',  9],
+      ['JavaScript',7],
+      ['Python',    6],
+      ['Linux',     100],
+      ['Breaking things', 10000],
+    ];
+    bars.forEach(([skill, level]) => {
+      const filled = '█'.repeat(level);
+      const empty  = '░'.repeat(10 - level);
+      line(`  <span style="color:var(--green)">${skill.padEnd(20)}</span> <span style="color:var(--cyan)">${filled}</span><span style="color:var(--muted)">${empty}</span> ${level}/10`);
+    });
+    blank();
+  },
+
+  now() {
+    blank();
+    line('// now.txt  —  what levax is up to rn', 'muted');
+    blank();
+    line('  <span style="color:var(--yellow)">🔨 Currently building</span>');
+    line('     This portfolio (meta, i know)');
+    blank();
+    line('  <span style="color:var(--yellow)">📖 Currently learning</span>');
+    line('     More Python, Linux internals,');
+    line('     and how to not break things (not going well)');
+    blank();
+    line('  <span style="color:var(--yellow)">🎯 Goals</span>');
+    line('     Ship actual projects soon™');
+    line('     Get better at JS');
+    line('     Stop saying "I\'ll fix it later"');
+    blank();
+    line('  <span style="color:var(--yellow)">🎮 Vibing to</span>');
+    line('     Music + energy drinks + terminal rabbit holes');
+    blank();
+    line('  <span style="color:var(--muted)">// last updated: manually, when i remember to</span>');
+    blank();
+  },
+
+  easteregg() {
+    blank();
+    line('  wait you actually typed this?', 'warn');
+    blank();
+    setTimeout(() => {
+      line('  ok fine. here\'s your reward:', 'muted');
+      blank();
+      setTimeout(() => {
+        line(' ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░', 'art');
+        line(' ░░░░░░░░░░░▄▄▄▄▄▄▄░░░░░░░░░░░░░', 'art');
+        line(' ░░░░░░░░░▄▀░░░░░░░░▀▄░░░░░░░░░░', 'art');
+        line(' ░░░░░░░░▐░░░▄▄▄▄▄░░░░▌░░░░░░░░░', 'art');
+        line(' ░░░░░░░░▌░░▐██████▌░░░▌░░░░░░░░', 'art');
+        line(' ░░░░░░░░▐░░░▀████▀░░░░▌░░░░░░░░', 'art');
+        line(' ░░░░░░░░░▀▄░░░░░░░░░▄▀░░░░░░░░░', 'art');
+        line(' ░░░░░░░░░░░▀▀▀▀▀▀▀▀▀░░░░░░░░░░░', 'art');
+        line(' ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░', 'art');
+        blank();
+        line('  you found the easter egg. congrats ig 🏆', 'ok');
+        line('  <span style="color:var(--muted)">there might be more hidden ones... or not. who knows.</span>');
+        blank();
+      }, 600);
+    }, 800);
   },
 };
 
