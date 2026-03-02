@@ -549,8 +549,8 @@ const COMMANDS = {
       ['HTML/CSS',  9],
       ['JavaScript',7],
       ['Python',    6],
-      ['Linux',     100],
-      ['Breaking things', 10000],
+      ['Linux',     10],
+      ['Breaking things', 10],
     ];
     bars.forEach(([skill, level]) => {
       const filled = '█'.repeat(level);
@@ -613,7 +613,7 @@ const COMMANDS = {
 async function boot() {
   input.disabled = true;
 
-  await typewrite('Initializing levax.portfolio v1.0.0...', 'muted');
+  await typewrite('Initializing levax.portfolio v1.1.0...', 'muted');
   await new Promise(r => setTimeout(r, 300));
   await typewrite('Loading modules... [ OK ]', 'ok');
   await new Promise(r => setTimeout(r, 200));
