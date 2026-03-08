@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+f<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
@@ -290,9 +290,9 @@ const DATA = {
     'Linux': ['Bash', 'Linux sysadmin', 'Package managers', 'Breaking things'],
   },
   projects: [
-    { name: 'This Portfolio :>', desc: 'i cooked this one soo hard 😮‍💨😮‍💨', status: 'WIP' },
+    { name: '???', desc: 'Coming soon... (the mystery is the feature)', status: 'WIP' },
     { name: '???', desc: 'Unknown rn :>', status: 'WIP' },
-    { name: '???', desc: 'Maybe Hyprland dotfiles or Fastfetch conf, idk :/', status: 'WIP' },
+    { name: '???', desc: 'Top secret, don\'t ask', status: 'WIP' },
   ],
   contact: [
     { label: 'Telegram',  value: '@notlevax', href: 'https://t.me/notlevax' },
@@ -355,26 +355,53 @@ const COMMANDS = {
     line('│            AVAILABLE COMMANDS           │', 'head');
     line('└─────────────────────────────────────────┘', 'muted');
     blank();
-    const cmds = [
-      ['about',    'Who is this guy?'],
-      ['skills',   'Tech stack & tools'],
-      ['projects', 'Things I\'ve built (or will build)'],
-      ['contact',  'Find me on the internet'],
-      ['github',   'Open my GitHub (yes it auto-opens)'],
-      ['whoami',   'Quick ID card'],
-      ['now',      'What I\'m currently up to'],
-      ['stats',    'My life in numbers & skill bars'],
-      ['fortune',  'Random dev wisdom (or garbage)'],
-      ['theme',    'Toggle light / dark mode'],
-      ['neofetch', 'System info, hacker style'],
-      ['clear',    'Clear the terminal'],
-      ['help',     'Show this menu'],
-      ['sudo rm -rf /', 'Don\'t.'],
+
+    const sections = [
+      { label: '👤 ABOUT', color: 'var(--cyan)', cmds: [
+        ['about',         'Who is this guy?'],
+        ['whoami',        'Quick ID card'],
+        ['whoami --real', 'The real me (no hacker mask)'],
+        ['now',           'What I\'m currently up to'],
+      ]},
+      { label: '🛠️  SKILLS & WORK', color: 'var(--cyan)', cmds: [
+        ['skills',        'Tech stack & tools'],
+        ['projects',      'Things I\'ve built (or will build)'],
+        ['stats',         'My life in numbers & skill bars'],
+      ]},
+      { label: '🌐 SOCIAL & CONTACT', color: 'var(--cyan)', cmds: [
+        ['contact',       'Find me on the internet'],
+        ['github',        'Open my GitHub'],
+        ['guestbook',     'Read & leave messages for levax'],
+      ]},
+      { label: '🎮 FUN & GAMES', color: 'var(--cyan)', cmds: [
+        ['snake',         'Play Snake in the terminal 🐍'],
+        ['fortune',       'Random dev wisdom (or garbage)'],
+        ['advice',        'Random life advice from my inner voice'],
+        ['banner <word>', 'Render a word in big ASCII art'],
+      ]},
+      { label: '📡 LIVE DATA', color: 'var(--cyan)', cmds: [
+        ['weather',       'Live weather in Tashkent'],
+        ['clock',         'Live ticking clock (Tashkent time)'],
+        ['music',         'What notlevax is listening to rn 🎵'],
+        ['github --stats',  'Live GitHub stats & repos'],
+      ]},
+      { label: '⚙️  SYSTEM', color: 'var(--cyan)', cmds: [
+        ['neofetch',      'System info, hacker style'],
+        ['man <command>', 'Manual page for any command'],
+        ['theme',         'Toggle light / dark mode'],
+        ['clear',         'Clear the terminal'],
+        ['help',          'Show this menu'],
+        ['sudo rm -rf /', 'Don\'t.'],
+      ]},
     ];
-    cmds.forEach(([cmd, desc]) => {
-      line(`  <span style="color:var(--green)">${cmd.padEnd(18)}</span><span style="color:var(--text)">${desc}</span>`);
+
+    sections.forEach(({ label, cmds }) => {
+      line(`  <span style="color:var(--yellow)">${label}</span>`);
+      cmds.forEach(([cmd, desc]) => {
+        line(`    <span style="color:var(--green);display:inline-block;min-width:190px">${cmd}</span><span style="color:var(--text)">${desc}</span>`);
+      });
+      blank();
     });
-    blank();
   },
 
   about() {
@@ -535,7 +562,7 @@ const COMMANDS = {
     line('// levax_stats.json', 'muted');
     blank();
     line('  <span style="color:var(--yellow)">[ REAL STATS ]</span>');
-    line(`  <span style="color:var(--green)">Linux installs broken       </span> <span style="color:var(--cyan)">16</span>`);
+    line(`  <span style="color:var(--green)">Linux installs broken       </span> <span style="color:var(--cyan)">47</span>`);
     line(`  <span style="color:var(--green)">Times said "it works on my machine"</span> <span style="color:var(--cyan)">∞</span>`);
     line(`  <span style="color:var(--green)">Cups of coffee today        </span> <span style="color:var(--cyan)">3 (and counting)</span>`);
     line(`  <span style="color:var(--green)">Tabs open right now         </span> <span style="color:var(--cyan)">too many</span>`);
@@ -549,7 +576,7 @@ const COMMANDS = {
       ['HTML/CSS',  9],
       ['JavaScript',7],
       ['Python',    6],
-      ['Linux',     10],
+      ['Linux',     8],
       ['Breaking things', 10],
     ];
     bars.forEach(([skill, level]) => {
@@ -577,7 +604,7 @@ const COMMANDS = {
     line('     Stop saying "I\'ll fix it later"');
     blank();
     line('  <span style="color:var(--yellow)">🎮 Vibing to</span>');
-    line('     Music + energy drinks + terminal rabbit holes');
+    line('     Music + ice tea drinks + terminal rabbit holes');
     blank();
     line('  <span style="color:var(--muted)">// last updated: manually, when i remember to</span>');
     blank();
@@ -607,13 +634,373 @@ const COMMANDS = {
       }, 600);
     }, 800);
   },
+
+  banner() {
+    blank();
+    line('  <span style="color:var(--muted)">Usage: banner &lt;word&gt;  — type a word after banner</span>');
+    blank();
+    line('  e.g. try:  <span style="color:var(--green)">banner levax</span>');
+    blank();
+  },
+
+  async weather() {
+    blank();
+    line('  fetching weather for Tashkent, UZ...', 'muted');
+    try {
+      const geo = await fetch('https://geocoding-api.open-meteo.com/v1/search?name=Tashkent&count=1');
+      const geoData = await geo.json();
+      const { latitude, longitude } = geoData.results[0];
+      const res = await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${latitude}&longitude=${longitude}&current=temperature_2m,relative_humidity_2m,wind_speed_10m,weather_code&wind_speed_unit=kmh`);
+      const data = await res.json();
+      const c = data.current;
+      const codes = {0:'☀️  Clear sky',1:'🌤️  Mainly clear',2:'⛅ Partly cloudy',3:'☁️  Overcast',45:'🌫️  Foggy',48:'🌫️  Icy fog',51:'🌦️  Light drizzle',61:'🌧️  Rain',71:'❄️  Snow',80:'🌧️  Showers',95:'⛈️  Thunderstorm'};
+      const desc = codes[c.weather_code] || codes[Math.floor(c.weather_code/10)*10] || '🌡️  Unknown';
+      blank();
+      line('  <span style="color:var(--cyan)">📍 Tashkent, Uzbekistan</span>');
+      blank();
+      line(`  <span style="color:var(--green)">Condition  </span> ${desc}`);
+      line(`  <span style="color:var(--green)">Temp       </span> <span style="color:var(--cyan)">${c.temperature_2m}°C</span>`);
+      line(`  <span style="color:var(--green)">Humidity   </span> ${c.relative_humidity_2m}%`);
+      line(`  <span style="color:var(--green)">Wind       </span> ${c.wind_speed_10m} km/h`);
+      blank();
+      line('  <span style="color:var(--muted)">// data from open-meteo.com (free, no key needed)</span>');
+    } catch(e) {
+      line('  failed to fetch weather. check your connection.', 'err');
+    }
+    blank();
+  },
+
+  clock() {
+    blank();
+    line('  <span style="color:var(--muted)">// live clock — press any key to stop</span>');
+    blank();
+    const el = document.createElement('div');
+    el.className = 'line ok';
+    output.appendChild(el);
+    blank();
+    input.disabled = true;
+    const tick = setInterval(() => {
+      const now = new Date();
+      const time = now.toLocaleTimeString('en-GB', { timeZone: 'Asia/Tashkent', hour12: false });
+      const date = now.toLocaleDateString('en-GB', { timeZone: 'Asia/Tashkent', weekday:'long', year:'numeric', month:'long', day:'numeric' });
+      el.innerHTML = `  🕐 <span style="color:var(--cyan);font-size:1.3em;letter-spacing:0.1em">${time}</span>  <span style="color:var(--muted)">${date} (Tashkent)</span>`;
+      output.scrollTop = output.scrollHeight;
+    }, 1000);
+    const stop = () => { clearInterval(tick); input.disabled = false; input.focus(); line('  clock stopped.', 'muted'); blank(); document.removeEventListener('keydown', stop); };
+    setTimeout(() => document.addEventListener('keydown', stop), 200);
+  },
+
+  async 'github --stats'() {
+    blank();
+    line('  fetching LevaxGit stats from GitHub...', 'muted');
+    try {
+      const [userRes, reposRes] = await Promise.all([
+        fetch('https://api.github.com/users/LevaxGit'),
+        fetch('https://api.github.com/users/LevaxGit/repos?per_page=100'),
+      ]);
+      const user  = await userRes.json();
+      const repos = await reposRes.json();
+      const stars = repos.reduce((s, r) => s + r.stargazers_count, 0);
+      const langs = [...new Set(repos.map(r => r.language).filter(Boolean))];
+      blank();
+      line('  <span style="color:var(--cyan)">github.com/LevaxGit</span>');
+      blank();
+      line(`  <span style="color:var(--green)">Followers    </span> <span style="color:var(--cyan)">${user.followers}</span>`);
+      line(`  <span style="color:var(--green)">Following    </span> ${user.following}`);
+      line(`  <span style="color:var(--green)">Public Repos </span> <span style="color:var(--cyan)">${user.public_repos}</span>`);
+      line(`  <span style="color:var(--green)">Total Stars  </span> <span style="color:var(--yellow)">⭐ ${stars}</span>`);
+      line(`  <span style="color:var(--green)">Member since </span> ${new Date(user.created_at).getFullYear()}`);
+      blank();
+      if (langs.length) { line(`  <span style="color:var(--green)">Languages    </span> ${langs.map(l => `<span class="tag">${l}</span>`).join('')}`); blank(); }
+      if (repos.length) {
+        line('  <span style="color:var(--yellow)">[ TOP REPOS ]</span>');
+        repos.sort((a,b) => b.stargazers_count - a.stargazers_count).slice(0,5).forEach(r => {
+          line(`  <span style="color:var(--cyan)">⭐ ${String(r.stargazers_count).padEnd(3)}</span>  <a href="${r.html_url}" target="_blank">${r.name}</a>  <span style="color:var(--muted)">${r.description || ''}</span>`);
+        });
+        blank();
+      }
+      line('  <span style="color:var(--muted)">// live data from GitHub public API</span>');
+    } catch(e) {
+      line('  failed to fetch GitHub stats.', 'err');
+      line('  <span style="color:var(--muted)">// this works on the live site — API is blocked in preview environments</span>');
+      line('  <span style="color:var(--muted)">// visit: <a href="https://github.com/LevaxGit" target="_blank">github.com/LevaxGit</a> directly</span>');
+    }
+    blank();
+  },
+
+  'whoami --real'() {
+    blank();
+    line('// whoami --real  (no hacker persona, just me)', 'muted');
+    blank();
+    line('  <span style="color:var(--cyan)">Levax, real talk:</span>');
+    blank();
+    line('  Trying to find real good friends,');
+    line('  but sometimes loves to be alone.');
+    blank();
+    line('  <span style="color:var(--yellow)">🎮 Games I play</span>');
+    line('  <span class="tag">Minecraft</span><span class="tag">Genshin Impact</span><span class="tag">Roblox</span><span class="tag">Brawl Stars</span>');
+    blank();
+    line('  <span style="color:var(--yellow)">💭 Life goal</span>');
+    line('  Boy just wants to be happy. <span style="color:var(--green)">:></span>');
+    blank();
+    line('  <span style="color:var(--muted)">// thanks for actually reading this far</span>');
+    blank();
+  },
+
+  advice() {
+    const advices = [
+      'drink water. seriously, go drink water right now.',
+      'if it works, don\'t touch it.',
+      'commit early, commit often. future you will be grateful.',
+      'take breaks. your brain is not a CPU (well, kind of).',
+      'the best time to start was yesterday. the second best time is now.',
+      'read the error message. the whole thing. yes, all of it.',
+      'it\'s okay to Google stuff. even senior devs do it.',
+      'sleep > grinding. a rested brain writes better code.',
+      'talk to people irl sometimes. the terminal can wait.',
+      'you don\'t need to know everything. just know how to find it.',
+      'your mental health > any deadline.',
+      'be kind to yourself. learning takes time.',
+      'write code for humans first, machines second.',
+      'done is better than perfect.',
+      'touch grass at least once a day. minimum.',
+    ];
+    const pick = advices[Math.floor(Math.random() * advices.length)];
+    blank();
+    line('  💡 levax\'s inner voice says:', 'muted');
+    blank();
+    line(`  "<span style="color:var(--cyan)">${pick}</span>"`);
+    blank();
+    line('  <span style="color:var(--muted)">// run again for more wisdom</span>');
+    blank();
+  },
+
+  async music() {
+    blank();
+    line('  fetching what notlevax is listening to...', 'muted');
+    try {
+      const res = await fetch('https://ws.audioscrobbler.com/2.0/?method=user.getrecenttracks&user=notlevax&api_key=64db80ab3d85f86d144d3263ec166fa0&format=json&limit=1');
+      const data = await res.json();
+      const tracks = data.recenttracks?.track;
+      if (!tracks || tracks.length === 0) { line('  no tracks found. levax might be offline.', 'warn'); blank(); return; }
+      const t = Array.isArray(tracks) ? tracks[0] : tracks;
+      const isNow = t['@attr']?.nowplaying === 'true';
+      blank();
+      line(`  <span style="color:var(--yellow)">${isNow ? '🎵 NOW PLAYING' : '🕐 LAST PLAYED'}</span>`);
+      blank();
+      line(`  <span style="color:var(--green)">Track   </span> <span style="color:var(--white)">${t.name}</span>`);
+      line(`  <span style="color:var(--green)">Artist  </span> <span style="color:var(--cyan)">${t.artist['#text']}</span>`);
+      line(`  <span style="color:var(--green)">Album   </span> ${t.album['#text'] || '—'}`);
+      blank();
+      line(`  <span style="color:var(--muted)">// via last.fm — <a href="https://last.fm/user/notlevax" target="_blank">last.fm/user/notlevax</a></span>`);
+    } catch(e) {
+      line('  failed to fetch music data.', 'err');
+      line('  <span style="color:var(--muted)">// works on the live site, may be blocked in preview</span>');
+    }
+    blank();
+  },
+
+  async guestbook() {
+    blank();
+    line('// guestbook.db', 'muted');
+    blank();
+    line('  fetching messages...', 'muted');
+    const BIN_ID = '69a810a9ae596e708f5e2adf';
+    const API_KEY = '$2a$10$69a81041ae596e708f5e2982';
+    try {
+      const res = await fetch(`https://api.jsonbin.io/v3/b/${BIN_ID}/latest`, {
+        headers: { 'X-Master-Key': API_KEY }
+      });
+      const data = await res.json();
+      const messages = data.record?.messages || [];
+      // clear the "fetching" line
+      output.lastChild.remove();
+      if (messages.length === 0) {
+        line('  no messages yet. be the first!', 'muted');
+      } else {
+        messages.slice(-10).reverse().forEach(m => {
+          line(`  <span style="color:var(--cyan)">${m.name}</span> <span style="color:var(--muted)">${m.date}</span>`);
+          line(`  <span style="color:var(--text)">${m.msg}</span>`);
+          blank();
+        });
+      }
+      blank();
+      line('  <span style="color:var(--yellow)">Leave a message:</span>');
+      line('  <span style="color:var(--muted)">format: guestbook add &lt;name&gt; | &lt;message&gt;</span>');
+      line('  <span style="color:var(--muted)">e.g:   guestbook add john | hey levax cool portfolio!</span>');
+    } catch(e) {
+      line('  failed to load guestbook.', 'err');
+      line('  <span style="color:var(--muted)">// works on live site, may be blocked in preview</span>');
+    }
+    blank();
+  },
+
+  snake() {
+    blank();
+    line('  🐍 SNAKE — use arrow keys to move, Q to quit', 'warn');
+    blank();
+
+    const COLS = 30, ROWS = 16, CELL = 16;
+    const canvas = document.createElement('canvas');
+    canvas.width  = COLS * CELL;
+    canvas.height = ROWS * CELL;
+    canvas.style.cssText = 'display:block;margin:8px 0 8px 24px;border:1px solid var(--border);background:#0a0a0a;';
+    output.appendChild(canvas);
+    output.scrollTop = output.scrollHeight;
+
+    const ctx = canvas.getContext('2d');
+    let snake = [{x:15,y:8},{x:14,y:8},{x:13,y:8}];
+    let dir = {x:1,y:0}, next = {x:1,y:0};
+    let food = {x:5,y:5};
+    let score = 0, running = true;
+    const scoreEl = document.createElement('div');
+    scoreEl.className = 'line ok';
+    scoreEl.textContent = '  Score: 0';
+    output.appendChild(scoreEl);
+    input.disabled = true;
+
+    function rndFood() {
+      let f;
+      do { f = {x:Math.floor(Math.random()*COLS), y:Math.floor(Math.random()*ROWS)}; }
+      while (snake.some(s=>s.x===f.x&&s.y===f.y));
+      return f;
+    }
+
+    function draw() {
+      ctx.fillStyle = '#0a0a0a'; ctx.fillRect(0,0,canvas.width,canvas.height);
+      // food
+      ctx.fillStyle = '#ff3d3d'; ctx.fillRect(food.x*CELL+2, food.y*CELL+2, CELL-4, CELL-4);
+      // snake
+      snake.forEach((s,i) => {
+        ctx.fillStyle = i===0 ? '#39ff14' : '#1a7a05';
+        ctx.fillRect(s.x*CELL+1, s.y*CELL+1, CELL-2, CELL-2);
+      });
+      // score
+      ctx.fillStyle='#555'; ctx.font='10px monospace';
+      ctx.fillText(`SCORE: ${score}`, 4, 12);
+    }
+
+    function gameOver() {
+      running = false;
+      ctx.fillStyle='rgba(0,0,0,0.75)'; ctx.fillRect(0,0,canvas.width,canvas.height);
+      ctx.fillStyle='#ff3d3d'; ctx.font='bold 20px monospace';
+      ctx.textAlign='center';
+      ctx.fillText('GAME OVER', canvas.width/2, canvas.height/2 - 10);
+      ctx.fillStyle='#ccc'; ctx.font='12px monospace';
+      ctx.fillText(`Score: ${score}`, canvas.width/2, canvas.height/2+14);
+      scoreEl.innerHTML = `  <span style="color:var(--red)">Game over!</span> Final score: <span style="color:var(--cyan)">${score}</span>`;
+      input.disabled = false; input.focus();
+      document.removeEventListener('keydown', onKey);
+    }
+
+    function tick() {
+      if (!running) return;
+      dir = {...next};
+      const head = {x:(snake[0].x+dir.x+COLS)%COLS, y:(snake[0].y+dir.y+ROWS)%ROWS};
+      if (snake.some(s=>s.x===head.x&&s.y===head.y)) { gameOver(); return; }
+      snake.unshift(head);
+      if (head.x===food.x && head.y===food.y) { score++; food=rndFood(); scoreEl.textContent=`  Score: ${score}`; }
+      else snake.pop();
+      draw();
+    }
+
+    function onKey(e) {
+      const map = {ArrowUp:{x:0,y:-1},ArrowDown:{x:0,y:1},ArrowLeft:{x:-1,y:0},ArrowRight:{x:1,y:0}};
+      if (map[e.key]) { const d=map[e.key]; if(d.x!=-dir.x||d.y!=-dir.y) next=d; e.preventDefault(); }
+      if (e.key.toLowerCase()==='q') { running=false; canvas.remove(); scoreEl.remove(); input.disabled=false; input.focus(); line('  snake quit. coward. 🐍', 'muted'); blank(); document.removeEventListener('keydown',onKey); }
+    }
+
+    document.addEventListener('keydown', onKey);
+    draw();
+    const loop = setInterval(() => { if(!running){clearInterval(loop);return;} tick(); }, 130);
+  },
+
+  man(cmd) {
+    const pages = {
+      about:      { usage:'about', desc:'Displays info about Levax — bio, status, and tags.' },
+      skills:     { usage:'skills', desc:'Lists all tech skills grouped by category.' },
+      projects:   { usage:'projects', desc:'Shows current and upcoming projects with status.' },
+      contact:    { usage:'contact', desc:'Lists all contact links — Telegram, Discord, Instagram, GitHub.' },
+      github:     { usage:'github', desc:'Prints GitHub profile and repo links, then auto-opens the profile in a new tab.' },
+      'github stats': { usage:'github stats', desc:'Fetches live GitHub stats: followers, repos, stars, languages, and top repos.' },
+      whoami:     { usage:'whoami', desc:'Quick ID card — name, handle, role.' },
+      'whoami --real': { usage:'whoami --real', desc:'The real Levax — no hacker persona, just honest vibes and game taste.' },
+      now:        { usage:'now', desc:'What Levax is currently building, learning, and listening to.' },
+      stats:      { usage:'stats', desc:'Fun stats and skill progress bars.' },
+      weather:    { usage:'weather', desc:'Fetches live weather for Tashkent, UZ from open-meteo.com. No API key needed.' },
+      clock:      { usage:'clock', desc:'Starts a live clock in Tashkent timezone. Press any key to stop.' },
+      music:      { usage:'music', desc:'Shows what notlevax is currently listening to via Last.fm API.' },
+      guestbook:  { usage:'guestbook\n  guestbook add <name> | <msg>', desc:'View messages left by visitors. Use guestbook add to leave your own.' },
+      snake:      { usage:'snake', desc:'Playable Snake game in the terminal. Arrow keys to move, Q to quit.' },
+      advice:     { usage:'advice', desc:'Prints a random piece of life/dev advice from Levax\'s inner voice.' },
+      fortune:    { usage:'fortune', desc:'Prints a random dev quote or hot take. Run multiple times for variety.' },
+      banner:     { usage:'banner <word>', desc:'Renders a word in big block ASCII art. Try: banner levax' },
+      neofetch:   { usage:'neofetch', desc:'Displays system info in neofetch style. Purely aesthetic.' },
+      theme:      { usage:'theme', desc:'Toggles between dark and light mode. Also available via the button in the titlebar.' },
+      clear:      { usage:'clear', desc:'Clears all terminal output. Fresh start.' },
+      help:       { usage:'help', desc:'Lists all available commands with short descriptions.' },
+      easteregg:  { usage:'easteregg', desc:'You already know what this does.' },
+      man:        { usage:'man <command>', desc:'Displays the manual page for a command. You\'re reading it right now.' },
+    };
+    if (!cmd) {
+      blank();
+      line('  Usage: <span style="color:var(--green)">man &lt;command&gt;</span>', 'info');
+      line(`  Available pages: <span style="color:var(--muted)">${Object.keys(pages).join(', ')}</span>`);
+      blank();
+      return;
+    }
+    const page = pages[cmd];
+    if (!page) { blank(); line(`  No manual entry for: <span style="color:var(--red)">${cmd}</span>`, 'err'); blank(); return; }
+    blank();
+    line('┌──────────────────────────────────────────┐', 'muted');
+    line(`│  MAN: ${cmd.toUpperCase().padEnd(35)}│`, 'head');
+    line('└──────────────────────────────────────────┘', 'muted');
+    blank();
+    line('  <span style="color:var(--yellow)">NAME</span>');
+    line(`      ${cmd}`);
+    blank();
+    line('  <span style="color:var(--yellow)">USAGE</span>');
+    page.usage.split('\n').forEach(u => line(`      ${u}`));
+    blank();
+    line('  <span style="color:var(--yellow)">DESCRIPTION</span>');
+    line(`      ${page.desc}`);
+    blank();
+  },
 };
+
+// ── KONAMI CODE ───────────────────────────────────────────────────────────────
+const KONAMI = ['ArrowUp','ArrowUp','ArrowDown','ArrowDown','ArrowLeft','ArrowRight','ArrowLeft','ArrowRight','b','a'];
+let konamiIdx = 0;
+document.addEventListener('keydown', e => {
+  if (e.key === KONAMI[konamiIdx]) {
+    konamiIdx++;
+    if (konamiIdx === KONAMI.length) {
+      konamiIdx = 0;
+      blank();
+      line('  ↑↑↓↓←→←→BA — KONAMI CODE ACTIVATED! 🎮', 'warn');
+      blank();
+      setTimeout(() => {
+        line(' ██╗  ██╗ █████╗  ██████╗██╗  ██╗███████╗██████╗ ██╗', 'art');
+        line(' ██║  ██║██╔══██╗██╔════╝██║ ██╔╝██╔════╝██╔══██╗██║', 'art');
+        line(' ███████║███████║██║     █████╔╝ █████╗  ██████╔╝██║', 'art');
+        line(' ██╔══██║██╔══██║██║     ██╔═██╗ ██╔══╝  ██╔══██╗╚═╝', 'art');
+        line(' ██║  ██║██║  ██║╚██████╗██║  ██╗███████╗██║  ██║██╗', 'art');
+        line(' ╚═╝  ╚═╝╚═╝  ╚═╝ ╚═════╝╚═╝  ╚═╝╚══════╝╚═╝  ╚═╝╚═╝', 'art');
+        blank();
+        line('  +30 lives granted. you absolute legend 🏆', 'ok');
+        line('  <span style="color:var(--muted)">// old school gamer detected.</span>');
+        blank();
+      }, 300);
+      output.scrollTop = output.scrollHeight;
+    }
+  } else { konamiIdx = 0; }
+});
 
 // ── BOOT SEQUENCE ─────────────────────────────────────────────────────────────
 async function boot() {
   input.disabled = true;
 
-  await typewrite('Initializing levax.portfolio v1.1.0...', 'muted');
+  await typewrite('Initializing levax.portfolio v2.0.0...', 'muted');
   await new Promise(r => setTimeout(r, 300));
   await typewrite('Loading modules... [ OK ]', 'ok');
   await new Promise(r => setTimeout(r, 200));
@@ -674,6 +1061,104 @@ input.addEventListener('keyup', e => {
   const key = raw.toLowerCase();
   if (COMMANDS[key]) {
     COMMANDS[key]();
+  } else if (key.startsWith('banner ')) {
+    const word = raw.slice(7).trim().toUpperCase();
+    if (!word) { line('Usage: banner <word>', 'warn'); }
+    else {
+      blank();
+      // Fixed-width font: every letter is exactly 5 chars wide, 5 rows tall
+      const FONT = {
+        'A':['  █  ',' █ █ ','█████','█   █','█   █'],
+        'B':['████ ','█   █','████ ','█   █','████ '],
+        'C':[' ████','█    ','█    ','█    ',' ████'],
+        'D':['████ ','█   █','█   █','█   █','████ '],
+        'E':['█████','█    ','███  ','█    ','█████'],
+        'F':['█████','█    ','███  ','█    ','█    '],
+        'G':[' ████','█    ','█  ██','█   █',' ████'],
+        'H':['█   █','█   █','█████','█   █','█   █'],
+        'I':['█████','  █  ','  █  ','  █  ','█████'],
+        'J':['█████','   █ ','   █ ','█  █ ',' ██  '],
+        'K':['█   █','█  █ ','███  ','█  █ ','█   █'],
+        'L':['█    ','█    ','█    ','█    ','█████'],
+        'M':['█   █','██ ██','█ █ █','█   █','█   █'],
+        'N':['█   █','██  █','█ █ █','█  ██','█   █'],
+        'O':[' ███ ','█   █','█   █','█   █',' ███ '],
+        'P':['████ ','█   █','████ ','█    ','█    '],
+        'Q':[' ███ ','█   █','█ █ █','█  ██',' ████'],
+        'R':['████ ','█   █','████ ','█  █ ','█   █'],
+        'S':[' ████','█    ',' ███ ','    █','████ '],
+        'T':['█████','  █  ','  █  ','  █  ','  █  '],
+        'U':['█   █','█   █','█   █','█   █',' ███ '],
+        'V':['█   █','█   █','█   █',' █ █ ','  █  '],
+        'W':['█   █','█   █','█ █ █','██ ██','█   █'],
+        'X':['█   █',' █ █ ','  █  ',' █ █ ','█   █'],
+        'Y':['█   █',' █ █ ','  █  ','  █  ','  █  '],
+        'Z':['█████','   █ ','  █  ',' █   ','█████'],
+        '0':[' ███ ','█  ██','█ █ █','██  █',' ███ '],
+        '1':['  █  ',' ██  ','  █  ','  █  ','█████'],
+        '2':[' ███ ','█   █','  ██ ',' █   ','█████'],
+        '3':['████ ','    █','  ██ ','    █','████ '],
+        '4':['█   █','█   █','█████','    █','    █'],
+        '5':['█████','█    ','████ ','    █','████ '],
+        '6':[' ███ ','█    ','████ ','█   █',' ███ '],
+        '7':['█████','   █ ','  █  ',' █   ','█    '],
+        '8':[' ███ ','█   █',' ███ ','█   █',' ███ '],
+        '9':[' ███ ','█   █',' ████','    █',' ███ '],
+        '!':['  █  ','  █  ','  █  ','     ','  █  '],
+        '?':[' ███ ','    █','  ██ ','     ','  █  '],
+        ' ':['     ','     ','     ','     ','     '],
+      };
+      const rows = ['','','','',''];
+      [...word].forEach(ch => {
+        const g = FONT[ch] || FONT['?'];
+        for(let i=0;i<5;i++) rows[i] += g[i] + ' ';
+      });
+      rows.forEach(r => line('  ' + r, 'art'));
+      blank();
+    }
+  } else if (key === 'whoami --real') {
+    COMMANDS['whoami --real']();
+  } else if (key === 'github stats') {
+    COMMANDS['github stats']();
+  } else if (key.startsWith('man ')) {
+    const cmd = raw.slice(4).trim().toLowerCase();
+    COMMANDS.man(cmd);
+  } else if (key === 'man') {
+    COMMANDS.man();
+  } else if (key.startsWith('guestbook add ')) {
+    const rest = raw.slice(14).trim();
+    const parts = rest.split('|');
+    if (parts.length < 2) {
+      blank();
+      line('  Usage: guestbook add &lt;name&gt; | &lt;message&gt;', 'warn');
+      blank();
+    } else {
+      const name = parts[0].trim();
+      const msg  = parts.slice(1).join('|').trim();
+      if (!name || !msg) { blank(); line('  Name and message cannot be empty.', 'err'); blank(); }
+      else {
+        blank();
+        line('  saving your message...', 'muted');
+        const BIN_ID = '69a810a9ae596e708f5e2adf';
+        const API_KEY = '$2a$10$69a81041ae596e708f5e2982';
+        (async () => {
+          try {
+            const getRes  = await fetch(`https://api.jsonbin.io/v3/b/${BIN_ID}/latest`, { headers:{'X-Master-Key':API_KEY} });
+            const getData = await getRes.json();
+            const messages = getData.record?.messages || [];
+            const date = new Date().toLocaleDateString('en-GB');
+            messages.push({ name, msg, date });
+            await fetch(`https://api.jsonbin.io/v3/b/${BIN_ID}`, {
+              method:'PUT',
+              headers:{'Content-Type':'application/json','X-Master-Key':API_KEY},
+              body: JSON.stringify({ messages })
+            });
+            line(`  ✅ message saved! thanks <span style="color:var(--cyan)">${name}</span> 🙏`, 'ok');
+          } catch(e) { line('  failed to save message.', 'err'); }
+          blank();
+        })();
+      }
+    }
   } else if (key === 'exit' || key === 'quit') {
     blank();
     line('There\'s no escape from this portfolio. 😈', 'warn');
