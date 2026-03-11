@@ -6,7 +6,9 @@
 ![preview](./preview.png)
 <!-- ^ take a screenshot of your portfolio and drop it here as preview.png -->
 
-[![▶ Watch the demo](./preview.png)](https://drive.google.com/file/d/1Bfoxgz53gdLcVIBackmIV-G1q_r5ps7w/view?usp=drive_link)
+## 📺 Demo Video 
+
+[![▶ Watch the demo] 👈Click the link to watch demo video](https://drive.google.com/file/d/1Bfoxgz53gdLcVIBackmIV-G1q_r5ps7w/view?usp=drive_link)
 
 ---
 
