@@ -6,6 +6,8 @@
 ![preview](./preview.png)
 <!-- ^ take a screenshot of your portfolio and drop it here as preview.png -->
 
+[![▶ Watch the demo](https://drive.google.com/file/d/1Bfoxgz53gdLcVIBackmIV-G1q_r5ps7w/view?usp=drive_link)
+
 ---
 
 ## ✨ Features
